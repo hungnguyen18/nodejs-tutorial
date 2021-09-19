@@ -7,7 +7,10 @@ const port = 3000;
 
 
 app.use(express.static(path.join(__dirname, "public")));
-
+app.use(express.urlencoded({
+  extended: true
+}));
+app.use(express.json());
 //http 
 app.use(morgan('combined'));
 
@@ -29,6 +32,15 @@ app.get('/trangchu' , (req, res) => {
 
 app.get('/menu1', (req, res) => {
   res.render('menu1');
+});
+
+app.get('/search', (req, res) => {
+  res.render('search');
+});
+
+app.post('/search', (req, res) => {
+  console.log(req.body);
+  res.send('da');
 });
 
 app.listen(port, () => {
