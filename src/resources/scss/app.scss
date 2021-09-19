@@ -1,0 +1,24 @@
+@import 'variables';
+
+
+*{
+    @extend %style;
+}
+
+h3{
+    @extend %style;
+    
+}
+
+span{
+    @extend %style;
+    color: $main-color;
+}
+
+h2{
+    @extend %style;
+}
+
+img{
+    max-width: 100%;
+}
