@@ -1,24 +1,22 @@
 @import 'variables';
 
-
-*{
+* {
     @extend %style;
 }
 
-h3{
+h3 {
     @extend %style;
-    
 }
 
-span{
+span {
     @extend %style;
     color: $main-color;
 }
 
-h2{
+h2 {
     @extend %style;
 }
 
-img{
+img {
     max-width: 100%;
 }
