@@ -5,7 +5,7 @@ class NewsController {
     }
     //[GET]/news/:slug
     show(req, res) {
-        res.render('covid');
+        res.render('news/covid');
     }
 }
 
