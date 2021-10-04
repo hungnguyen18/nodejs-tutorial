@@ -24,3 +24,16 @@ img {
 .card-data {
     margin-bottom: 20px;
 }
+.card {
+    a {
+        img {
+            height: 200px;
+        }
+    }
+}
+
+.card-body {
+    p {
+        height: 100px;
+    }
+}
