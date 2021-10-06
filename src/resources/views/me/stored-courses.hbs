@@ -1,0 +1,86 @@
+<div class="mt-4">
+    <h2>Khóa học của tôi</h2>
+    <table class="table">
+        <thead class="table-light">
+            <tr>
+                <th>#</th>
+                <th>Tên khóa học</th>
+                <th>Mô tả</th>
+                <th>Ngày tạo</th>
+                <th>Option</th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each courses}}
+                <tr>
+                    <td>{{sum @index 1}}</td>
+                    <td>{{this.name}}</td>
+                    <td>{{this.description}}</td>
+                    <td>{{this.createdAt}}</td>
+                    <td>
+                        <a href="/courses/{{this._id}}/edit" class="btn btn-primary">Sửa</a>
+                        <a class="btn btn-danger" data-bs-toggle="modal" data-bs-whatever="{{this.name}}" data-id="{{this._id}}" data-bs-target="#exampleModal">Xóa</a>
+                    </td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        Bạn có chắc chắn xóa khóa học <span id="name-course"></span> không  ?
+      </div>
+      <div class="modal-footer">
+        <a type="button" id="btn-delete" class="btn btn-danger">Xóa</a>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="test"></div>
+
+{{!-- Delete form --}}
+{{!-- <form method="POST" action="/courses/{{course._id}}?_method=DELETE"></form> --}}
+
+<script> 
+    document.addEventListener('DOMContentLoaded', function() {   
+        var exampleModal = document.getElementById('exampleModal')
+        const nameCourse = document.getElementById('name-course');
+        let courseId = ''; 
+        // bắt id từ table
+        exampleModal.addEventListener('show.bs.modal', function (event) {
+            // Button that triggered the modal
+            var button = event.relatedTarget
+            // Extract info from data-bs-* attributes
+            courseId = button.getAttribute('data-id');
+            var name = button.getAttribute('data-bs-whatever');
+            
+            nameCourse.textContent = name;
+        });
+        // dùng ajax gửi id về CourseController
+        const btnDelete = document.getElementById('btn-delete');
+        btnDelete.onclick = () => {
+             $.ajax({
+                url: `/courses/${courseId}`,
+                type: "DELETE"
+            }).then((res) => {
+                if(res == 'ok') {
+                    window.location.reload();
+                    alert('Xóa khóa học thành công');
+                }
+                else {
+                     alert('Xóa khóa học thất bại');
+                }
+            });
+        };   
+    });
+</script>

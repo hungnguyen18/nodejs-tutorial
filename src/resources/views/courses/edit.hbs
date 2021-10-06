@@ -1,0 +1,18 @@
+<div>
+    <h2>Edit khóa học</h2>
+    <form method="POST" action="/courses/{{course._id}}?_method=PUT">
+        <div class="mb-3">
+            <label class="form-label">Tên khóa học</label>
+            <input type="text" class="form-control" name="name" value="{{course.name}}">
+        </div>
+        <div class="mb-3">
+            <label class="form-label">Mô tả khóa học</label>
+            <textarea type="text" class="form-control" name="description" >{{course.description}}</textarea>
+        </div>
+        <div class="mb-3">
+            <label class="form-label">IMG</label>
+            <input type="text" class="form-control" name="img" value="{{course.img}}">
+        </div>
+        <button type="submit" class="btn btn-primary">Sửa khóa học</button>
+    </form>
+</div>
