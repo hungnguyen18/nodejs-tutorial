@@ -8,9 +8,19 @@ const {
 class MeController {
     //[GET]/me/stored/courses
     indexMe(req, res, next) {
-        Course.find({})
-            .then((courses) => {
+        Promise.all([Course.find({}), Course.countDocumentsDeleted()])
+            .then(([courses, deletedCount]) =>
                 res.render('me/stored-courses', {
+                    deletedCount,
+                    courses: mutipleMongooseToObject(courses),
+                }),
+            )
+            .catch(next);
+    }
+    trash(req, res, next) {
+        Course.findDeleted({})
+            .then((courses) => {
+                res.render('me/trash-courses', {
                     courses: mutipleMongooseToObject(courses),
                 });
             })

@@ -42,7 +42,19 @@ class CourseController {
             .catch(next);
     }
     //[DELETE]/course/:id
-    delete_store(req, res, next) {
+    delete_soft(req, res, next) {
+        Course.delete({ _id: req.params.id })
+            .then(() => res.send('ok'))
+            .catch(next);
+    }
+    //[PATCH]/course/:id/restore
+    restore_store(req, res, next) {
+        Course.restore({ _id: req.params.id })
+            .then(() => res.send('ok'))
+            .catch(next);
+    }
+    //[DELETE]/course/:id/force
+    delete_force(req, res, next) {
         Course.deleteOne({ _id: req.params.id })
             .then(() => res.send('ok'))
             .catch(next);

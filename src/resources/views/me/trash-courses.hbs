@@ -1,13 +1,13 @@
 <div class="mt-4">
-    <h2>Khóa học của tôi</h2>
-    <a href="/me/trash/courses">Thùng rác ({{deletedCount}})</a>
+    <h2>Khóa học đã xóa</h2>
+    <a href="/me/stored/courses">Quay lại danh sách</a>
     <table class="table">
         <thead class="table-light">
             <tr>
                 <th>#</th>
                 <th>Tên khóa học</th>
                 <th>Mô tả</th>
-                <th>Ngày tạo</th>
+                <th>Ngày xóa</th>
                 <th>Option</th>
             </tr>
         </thead>
@@ -17,17 +17,16 @@
                     <td>{{sum @index 1}}</td>
                     <td>{{this.name}}</td>
                     <td>{{this.description}}</td>
-                    <td>{{this.createdAt}}</td>
+                    <td>{{this.deletedAt}}</td>
                     <td>
-                        <a href="/courses/{{this._id}}/edit" class="btn btn-primary">Sửa</a>
-                        <a class="btn btn-danger" data-bs-toggle="modal" data-bs-whatever="{{this.name}}" data-id="{{this._id}}" data-bs-target="#exampleModal">Xóa</a>
+                        <a href="" class="btn btn-primary btn-restore" data-id="{{this._id}}">Khôi phục</a>
+                        <a class="btn btn-danger" data-bs-toggle="modal" data-bs-whatever="{{this.name}}" data-id="{{this._id}}" data-bs-target="#exampleModal">Xóa vĩnh viễn</a>
                     </td>
                 </tr>
                 {{else}}
                 <tr>
                     <td colspan="5" class="text-center">
-                        Bạn chưa đăng khóa học nào.
-                        <a href="/courses/create"> Đăng khóa học</a>
+                        Thùng rác trống.
                     </td>
                 </tr>
             {{/each}}
@@ -45,10 +44,10 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        Bạn có chắc chắn xóa khóa học <span id="name-course"></span> không  ?
+        Bạn có chắc chắn xóa vĩnh viễn khóa học <span id="name-course"></span> không  ?
       </div>
       <div class="modal-footer">
-        <a type="button" id="btn-delete" class="btn btn-danger">Xóa</a>
+        <a type="button" id="btn-delete" class="btn btn-danger">Xóa vĩnh viễn</a>
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
       </div>
     </div>
@@ -64,6 +63,9 @@
         var exampleModal = document.getElementById('exampleModal')
         const nameCourse = document.getElementById('name-course');
         let courseId = ''; 
+        const btnRestore = $('.btn-restore');
+        
+
         // bắt id từ table
         exampleModal.addEventListener('show.bs.modal', function (event) {
             // Button that triggered the modal
@@ -78,17 +80,35 @@
         const btnDelete = document.getElementById('btn-delete');
         btnDelete.onclick = () => {
              $.ajax({
-                url: `/courses/${courseId}`,
+                url: `/courses/${courseId}/force`,
                 type: "DELETE"
             }).then((res) => {
                 if(res == 'ok') {
                     window.location.reload();
-                    alert('Xóa khóa học thành công');
+                    alert('Xóa vĩnh viễn khóa học thành công');
+                }
+                else {
+                     alert('Xóa vĩnh viễn khóa học thất bại');
+                }
+            });
+        };   
+       
+        //restore khóa học
+        btnRestore.click(function (e) {
+            e.preventDefault();
+            const restoreId = $(this).data('id');
+            $.ajax({
+                url: `/courses/${restoreId}/restore`,
+                type: "PATCH"
+            }).then((res) => {
+                if(res == 'ok') {
+                    window.location.reload();
+                    alert('Khôi phục khóa học thành công');
                 }
                 else {
                      alert('Xóa khóa học thất bại');
                 }
             });
-        };   
+        }); 
     });
 </script>
