@@ -1,10 +1,24 @@
-<div class="mt-4">
+<form method="post" action="/courses/handle-form-action" name="container-form"  class="mt-4">
     <h2>Khóa học của tôi</h2>
     <a href="/me/trash/courses">Thùng rác ({{deletedCount}})</a>
+    <div class="d-flex p-2 bd-highligh ">   
+        <div class="form-check w-25 p-3">
+            <input class="form-check-input" type="checkbox" value="" id="checkbox-all">
+            <label class="form-check-label" for="checkbox-all">
+                Chọn tất cả
+            </label>
+        </div>
+        <select class="form-select w-50 p-3" aria-label=".form-select-sm example" name="action" required>
+            <option value="" selected>-- Chọn hành động --</option>
+            <option value="delete">Xóa</option>
+        </select>
+        <button class="btn btn-primary btn-sm w-25 p-3 disabled" id="btn-check">Thực hiện</button>
+    </div>
     <table class="table">
         <thead class="table-light">
             <tr>
                 <th>#</th>
+                <th>STT</th>
                 <th>Tên khóa học</th>
                 <th>Mô tả</th>
                 <th>Ngày tạo</th>
@@ -14,6 +28,7 @@
         <tbody>
             {{#each courses}}
                 <tr>
+                    <td><input class="form-check-input" type="checkbox" name="courseIds[]" id="check" value="{{this._id}}"></td>
                     <td>{{sum @index 1}}</td>
                     <td>{{this.name}}</td>
                     <td>{{this.description}}</td>
@@ -33,7 +48,7 @@
             {{/each}}
         </tbody>
     </table>
-</div>
+</form>
 
 
 <!-- Modal -->
@@ -63,7 +78,11 @@
     document.addEventListener('DOMContentLoaded', function() {   
         var exampleModal = document.getElementById('exampleModal')
         const nameCourse = document.getElementById('name-course');
-        let courseId = ''; 
+        var courseId = ''; 
+        const checkboxAll = $('#checkbox-all');
+        const checkboxItem = $('input[name="courseIds[]"]');
+        const checkboxBtn = $('#btn-check');
+        var containerForm = document.forms['container-form'];
         // bắt id từ table
         exampleModal.addEventListener('show.bs.modal', function (event) {
             // Button that triggered the modal
@@ -89,6 +108,39 @@
                      alert('Xóa khóa học thất bại');
                 }
             });
-        };   
+        };
+
+        
+        // checked khóa học sự kiện
+        checkboxAll.change(function() {
+            var isCheckedAll = $(this).prop('checked');
+            checkboxItem.prop('checked', isCheckedAll);
+            renderCheckAllSubmitBtn();
+        });
+         
+        checkboxItem.change(function() {
+            var isCheckedTotal = checkboxItem.length === $('input[name="courseIds[]"]:checked').length;
+            checkboxAll.prop('checked', isCheckedTotal);
+            renderCheckAllSubmitBtn();
+        });   
+        
+        // Button sự kiện checkbox
+        function renderCheckAllSubmitBtn() {
+            var checkedCount = $('input[name="courseIds[]"]:checked').length;
+            if(checkedCount > 0) {
+                checkboxBtn.removeClass('disabled');
+            } else {
+                checkboxBtn.addClass('disabled');
+            }
+        };
+        
+        // Action button 
+        checkboxBtn.on('submit',  function(e) {
+            var isSubmitTable = !$(this).hasClass('disabled');
+            if(!isSubmitTable) {
+                e.preventDefault();
+            }
+        });
+    
     });
 </script>
