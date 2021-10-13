@@ -9,8 +9,14 @@ const port = 3000;
 const route = require('./routes');
 const db = require('./config/db');
 
+//middleware
+const SortMiddleware = require('./app/middlewares/SortMiddleware');
+
 //connect DB
 db.connect();
+
+//Custom middleware
+app.use(SortMiddleware);
 
 //read file public
 app.use(express.static(path.join(__dirname, 'public')));
@@ -32,6 +38,29 @@ app.engine(
         extname: '.hbs',
         helpers: {
             sum: (a, b) => a + b,
+            sorttable: (field, sort) => {
+                const sortType = field === sort.column ? sort.type : 'default';
+
+                const icons = {
+                    default: 'fas fa-sort',
+                    asc: 'fas fa-sort-amount-down-alt',
+                    desc: 'fas fa-sort-amount-down',
+                };
+
+                const types = {
+                    default: 'desc',
+                    asc: 'desc',
+                    desc: 'asc',
+                };
+
+                const icon = icons[sortType];
+
+                const type = types[sortType];
+
+                return `<a href="?_sort&column=${field}&type=${type}">
+                            <i class="${icon}"></i>
+                        </a>`;
+            },
         },
     }),
 );

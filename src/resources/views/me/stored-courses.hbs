@@ -14,14 +14,22 @@
         </select>
         <button class="btn btn-primary btn-sm w-25 p-3 disabled" id="btn-check">Thực hiện</button>
     </div>
+
     <table class="table">
         <thead class="table-light">
             <tr>
                 <th>#</th>
                 <th>STT</th>
-                <th>Tên khóa học</th>
+                <th>
+                    Tên khóa học
+                    {{{sorttable 'name' _sort}}}
+                    
+                </th>
                 <th>Mô tả</th>
-                <th>Ngày tạo</th>
+                <th>
+                    Ngày tạo
+                    {{{sorttable 'createdAt' _sort}}}
+                </th>
                 <th>Option</th>
             </tr>
         </thead>
@@ -82,7 +90,8 @@
         const checkboxAll = $('#checkbox-all');
         const checkboxItem = $('input[name="courseIds[]"]');
         const checkboxBtn = $('#btn-check');
-        var containerForm = document.forms['container-form'];
+        //var containerForm = document.forms['container-form'];
+        var containerForm = $('form[name="container-form"]');
         // bắt id từ table
         exampleModal.addEventListener('show.bs.modal', function (event) {
             // Button that triggered the modal
@@ -135,7 +144,8 @@
         };
         
         // Action button 
-        checkboxBtn.on('submit',  function(e) {
+        containerForm.on('submit',  function(e) {
+           
             var isSubmitTable = !$(this).hasClass('disabled');
             if(!isSubmitTable) {
                 e.preventDefault();
